@@ -10,7 +10,7 @@ def run():
     df = []
     for f in files:
         df.append(sqly.readcsv.import_csv(f))
-    print(sqly.readcsv.combine_dataframes(df))
+    print(sqly.combinedataframe.combine_dataframes(df))
 
     #for f in files:
     #    sqly.readcsv.
