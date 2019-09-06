@@ -10,8 +10,10 @@ def run():
     df = []
     for f in files:
         df.append(sqly.readcsv.import_csv(f))
-    print(sqly.combinedataframe.combine_dataframes(df))
-
+    dt = sqly.combinedataframe.merge_dataframes(df,merge_type='inner')
+    #report = sqly.inputfiles.readcsv.generate_report(dt)
+    #print(dt)
+    #print(report)
     #for f in files:
     #    sqly.readcsv.
 

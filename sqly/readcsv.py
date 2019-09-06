@@ -18,6 +18,7 @@ def generate_report(in_data, is_csv=False):
     if is_csv:
         in_data = import_csv(in_data)
     report = pp.ProfileReport(in_data)
+    report.title = 'Your data profile'
     return report
 
 def save_report(report, out_file_name):
