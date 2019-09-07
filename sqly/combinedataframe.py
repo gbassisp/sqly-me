@@ -26,7 +26,9 @@ def merge_dataframes(dataframes, file_names=[], merge_type='inner'):
         t -= 1
     done = False
     name = ''
+    remaining_names = []
     merged = False #check if current df merges with any other df
+    remaining_dfs = dataframes[:]
     while not done:
         t = len(dataframes) - 1
         print('Initial number of dataframes is {}'.format(t+1))
@@ -50,9 +52,11 @@ def merge_dataframes(dataframes, file_names=[], merge_type='inner'):
                     name += ', {}'.format(file_names[left])
                     file_names.pop(left)
                     file_names[-1] = name
+                    remaining_names = file_names[:-1]
                 merged = True
                 print('Merging something')
                 dataframes[-1] = new_dt
+                remaining_dfs = dataframes[:-1]
                 break
             except Exception as e:
                 print('Could not merge with {}, moving on to next. Encountered {}'.format(name, e))
@@ -67,15 +71,23 @@ def merge_dataframes(dataframes, file_names=[], merge_type='inner'):
                 if names_exist:
                     file_names.pop(right)
 
-    return dt, name
-    
-def generate_report(dataframe, file_names=[], merge_type='inner', merged=True, auto_save=True):
+    return dt, name, remaining_dfs, remaining_names
+
+def generate_reports(dataframe, file_names=[], merge_type='inner', merged=True, auto_save=True):
     
     if not merged:
-        dataframe, merged_files = merge_dataframes(dataframe, file_names, merge_type)
-    report = readcsv.generate_report(dataframe)
-    report.title = 'Data from: {}'.format(merged_files)
-    print('Report generated with {} files'.format(merged_files))
-    if auto_save:
-        readcsv.save_report(report)
-    return report
+        merges, names = [], []
+        unmerged_dataframes, unmerged_names = dataframe[:], file_names[:]
+        while len(unmerged_dataframes) > 1:
+            dataframe, merged_files, unmerged_dataframes, unmerged_names = merge_dataframes(unmerged_dataframes, unmerged_names, merge_type)
+            merges.append(dataframe)
+            names.append(merged_files)
+        dataframes = merges
+    for dataframe, merged_files in zip(dataframes, names):
+        report = readcsv.generate_report(dataframe)
+        report.title = 'Data from: {}'.format(merged_files)
+        print('Report generated with {} files'.format(merged_files))
+        if auto_save:
+            readcsv.save_report(report)
+        yield report
+
