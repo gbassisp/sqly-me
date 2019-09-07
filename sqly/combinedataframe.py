@@ -24,14 +24,52 @@ def merge_dataframes(dataframes, file_names=[], merge_type='inner'):
             if names_exist:
                 file_names.pop(t)
         t -= 1
-    t = len(dataframes) - 1
-    dt = dataframes[t]
-    if names_exist:
-        name = file_names[t]
-    while t > 0:
-        print('Merging')
+    done = False
+    name = ''
+    while not done:
+        merged = False #check if current df merges with any other df
+        t = len(dataframes) - 1
+        print('Initial number of dataframes is {}'.format(t+1))
+        dt = dataframes[t]
+        if names_exist:
+            name = file_names[t]
+        if t < 1: #one of the possibles way of finishing
+            if not merged:
+                print('Returning a report of unmerged data\nNo connection could be find at all')
+            else:
+                print('Returning a merged data report')
+            break
+        right  = t
+        left = t
+        while left > 0:
+            left -= 1
+            try:
+                new_dt = pd.merge(dataframes[left],dt,how=merge_type)
+                dataframes.pop(left)
+                if names_exist:
+                    name += ', {}'.format(file_names[left])
+                    file_names.pop(left)
+                    file_names[-1] = name
+                merged = True
+                dataframes[-1] = new_dt
+                break
+            except Exception as e:
+                print('Could not merge with {}, moving on to next. Encountered {}'.format(name, e))
+        else:
+            print('{} could not merge with any other df'.format(right))
+            if merged:
+                print('Since it has merged, this is the final outcome. Other dfs are discarded')
+                break
+            else:
+                print('Since it could not merge, it will be discarded and try with other dfs')
+                dataframes.pop(right)
+
+
+
+        '''print('Merging')
         try:
             new_dt = pd.merge(dataframes[t-1],dt,how=merge_type)
+            dataframes.pop(t-1)
             if names_exist:
                 name += ', {}'.format(file_names[t-1])
         except Exception as e:
@@ -41,7 +79,7 @@ def merge_dataframes(dataframes, file_names=[], merge_type='inner'):
                 print('File {} did not merge with {}'.format(file_names[t-1], name))
                 file_names.pop(t-1)
         dt = new_dt
-        t -= 1
+        t -= 1'''
 
     return dt, name
     
