@@ -8,7 +8,7 @@ def run():
     for f in files:
         t = sqly.readcsv.import_csv(f)
         df.append(t)
-    dt = sqly.combinedataframe.generate_reports(df,file_names=names,merge_type=merge_type,merged=False)
+    dt = sqly.combinedataframe.generate_reports(df,file_names=names,merge_type=merge_type,merged=False, show_reports=True)
     for d in dt:
         print('You have a new report')
 

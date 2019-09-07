@@ -73,7 +73,7 @@ def merge_dataframes(dataframes, file_names=[], merge_type='inner'):
 
     return dt, name, remaining_dfs, remaining_names
 
-def generate_reports(dataframe, file_names=[], merge_type='inner', merged=True, auto_save=True):
+def generate_reports(dataframe, file_names=[], merge_type='inner', merged=True, auto_save=True, show_reports=True):
     
     if not merged:
         merges, names = [], []
@@ -89,7 +89,7 @@ def generate_reports(dataframe, file_names=[], merge_type='inner', merged=True, 
             report.title = 'Data from: {}'.format(merged_files)
             print('Report generated with {} files'.format(merged_files))
             if auto_save:
-                name = readcsv.save_report(report)
+                name = readcsv.save_report(report,show=show_reports)
                 tosql.create_db(name, dataframe, 'test')
                 
         except Exception as e:
