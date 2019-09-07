@@ -1,5 +1,5 @@
 import pandas as pd
-from . import readcsv
+from . import readcsv, tosql
 
 
 def analyse_headers(dataframes):
@@ -89,7 +89,9 @@ def generate_reports(dataframe, file_names=[], merge_type='inner', merged=True, 
             report.title = 'Data from: {}'.format(merged_files)
             print('Report generated with {} files'.format(merged_files))
             if auto_save:
-                readcsv.save_report(report)
+                name = readcsv.save_report(report)
+                tosql.create_db(name, dataframe, 'test')
+                
         except Exception as e:
             print("Could not generate report. Encountered {}".format(e))
             report = None

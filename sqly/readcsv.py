@@ -43,7 +43,7 @@ def save_report(report, out_file_name=None, show=True):
         out_file_name = out_path / (report.get_unique_file_name())
 
     report.to_file(out_file_name, silent=(not show))
-    return None
+    return out_file_name
 
 def csv_to_report_file(csv_file_name, report_file_name):
     report = generate_report(csv_file_name,is_csv=True)
