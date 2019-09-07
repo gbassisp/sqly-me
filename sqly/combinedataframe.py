@@ -26,8 +26,8 @@ def merge_dataframes(dataframes, file_names=[], merge_type='inner'):
         t -= 1
     done = False
     name = ''
+    merged = False #check if current df merges with any other df
     while not done:
-        merged = False #check if current df merges with any other df
         t = len(dataframes) - 1
         print('Initial number of dataframes is {}'.format(t+1))
         dt = dataframes[t]
@@ -51,6 +51,7 @@ def merge_dataframes(dataframes, file_names=[], merge_type='inner'):
                     file_names.pop(left)
                     file_names[-1] = name
                 merged = True
+                print('Merging something')
                 dataframes[-1] = new_dt
                 break
             except Exception as e:
@@ -63,23 +64,8 @@ def merge_dataframes(dataframes, file_names=[], merge_type='inner'):
             else:
                 print('Since it could not merge, it will be discarded and try with other dfs')
                 dataframes.pop(right)
-
-
-
-        '''print('Merging')
-        try:
-            new_dt = pd.merge(dataframes[t-1],dt,how=merge_type)
-            dataframes.pop(t-1)
-            if names_exist:
-                name += ', {}'.format(file_names[t-1])
-        except Exception as e:
-            new_dt = dt
-            print('Could not merge some data, encountered {}'.format(e))
-            if names_exist:
-                print('File {} did not merge with {}'.format(file_names[t-1], name))
-                file_names.pop(t-1)
-        dt = new_dt
-        t -= 1'''
+                if names_exist:
+                    file_names.pop(right)
 
     return dt, name
     
@@ -88,8 +74,8 @@ def generate_report(dataframe, file_names=[], merge_type='inner', merged=True, a
     if not merged:
         dataframe, merged_files = merge_dataframes(dataframe, file_names, merge_type)
     report = readcsv.generate_report(dataframe)
-    report.title = merged_files
-    print('Report generated with {} files'.format(report.title))
+    report.title = 'Data from: {}'.format(merged_files)
+    print('Report generated with {} files'.format(merged_files))
     if auto_save:
         readcsv.save_report(report)
     return report
