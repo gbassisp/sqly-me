@@ -28,5 +28,6 @@ in_path = inputfiles.in_path
 out_path = inputfiles.out_path
 
 available_csv_files, available_csv_file_names = inputfiles.get_in_files(in_path, csv_only=True)
+available_csv_files, available_csv_file_names = inputfiles.get_in_files(in_path, csv_only=True,convert=False)
 
 

@@ -10,7 +10,7 @@ def run():
         df.append(t)
     dt = sqly.combinedataframe.generate_reports(df,file_names=names,merge_type=merge_type,merged=False, show_reports=True)
     for d in dt:
-        print('You have a new report')
+        print('Fetching report')
 
 if __name__ == "__main__":
     run()
