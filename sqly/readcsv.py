@@ -9,9 +9,10 @@ in_path = inputfiles.in_path
 out_path = inputfiles.out_path
 
 def decode_file(file):
-    with open(file,'r') as f:
+    with open(file,'r',encoding='utf-8',errors='ignore') as f:
         lines = f.readlines()
-    lines = [bytes(line, 'utf-8').decode('utf-8', 'ignore') for line in lines]
+    lines = [bytes(line, 'utf-8').decode('ascii', 'ignore') for line in lines]
+    #lines = u'\n'.join(lines).encode('utf-8').strip()
     with open(file, 'w') as f:
         f.writelines(lines)
     return None
