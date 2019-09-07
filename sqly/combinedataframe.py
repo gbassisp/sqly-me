@@ -92,5 +92,6 @@ def generate_reports(dataframe, file_names=[], merge_type='inner', merged=True, 
                 readcsv.save_report(report)
         except Exception as e:
             print("Could not generate report. Encountered {}".format(e))
+            report = None
         yield report
 
