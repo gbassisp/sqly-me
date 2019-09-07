@@ -84,10 +84,13 @@ def generate_reports(dataframe, file_names=[], merge_type='inner', merged=True, 
             names.append(merged_files)
         dataframes = merges
     for dataframe, merged_files in zip(dataframes, names):
-        report = readcsv.generate_report(dataframe)
-        report.title = 'Data from: {}'.format(merged_files)
-        print('Report generated with {} files'.format(merged_files))
-        if auto_save:
-            readcsv.save_report(report)
+        try:
+            report = readcsv.generate_report(dataframe)
+            report.title = 'Data from: {}'.format(merged_files)
+            print('Report generated with {} files'.format(merged_files))
+            if auto_save:
+                readcsv.save_report(report)
+        except Exception as e:
+            print("Could not generate report. Encountered {}".format(e))
         yield report
 
