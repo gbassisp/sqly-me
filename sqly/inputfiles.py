@@ -24,15 +24,17 @@ def get_in_files(in_path, csv_only=True):
     path = in_path
     print('Reading files at {}'.format(path))
     files = os.listdir(path)
+    names = []
     new_files = []
     for f in files:
         if csv_only:
             if is_csv(f):
                 new_files.append(path / f)
+                names.append((path / f).stem)
         else:
             new_files.append(path / f)
     files = new_files
-    return files
+    return files, names
 
 def generate_report_names(filenames, out_path):
     for f in filenames:

@@ -2,20 +2,12 @@ import sqly
 
 def run():
 
-    files = sqly.available_csv_files
-    #print(files)
-
-    #sqly.inputfiles.generate_all_reports(files)
-    #print('Files created')
+    files, names = sqly.available_csv_files, sqly.available_csv_file_names
     df = []
     for f in files:
-        df.append(sqly.readcsv.import_csv(f))
-    dt = sqly.combinedataframe.merge_dataframes(df,merge_type='inner')
-    #report = sqly.inputfiles.readcsv.generate_report(dt)
-    #print(dt)
-    #print(report)
-    #for f in files:
-    #    sqly.readcsv.
+        t = sqly.readcsv.import_csv(f)
+        df.append(t)
+    dt = sqly.combinedataframe.generate_report(df,file_names=names,merge_type='outer',merged=False)
 
 
 if __name__ == "__main__":
