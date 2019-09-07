@@ -1,3 +1,4 @@
 pandas
 pydqc
 pandas-profiling
+SQLAlchemy
