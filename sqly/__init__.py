@@ -9,13 +9,13 @@ greeting_message = '''
 
 Welcome to the SqlyMe project
 
-This project is an open source (under the Apache License, see the docs) solution to the GovHack event, 
+This project is an open source solution to the GovHack event, 
 held in South Australia 2019, but it should be useful to use in other cases
 
 I hope it is good enough...
 
 Cheers,
-Guilherme Bassi Pontes
+The Porretas Team
 
 '''.lstrip()
 print(greeting_message)

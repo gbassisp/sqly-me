@@ -29,6 +29,7 @@ def merge_dataframes(dataframes, file_names=[], merge_type='inner'):
     remaining_names = []
     merged = False #check if current df merges with any other df
     remaining_dfs = dataframes[:]
+    limit = int((t+1)*(t+1))+1
     while not done:
         t = len(dataframes) - 1
         print('Initial number of dataframes is {}'.format(t+1))
@@ -43,6 +44,7 @@ def merge_dataframes(dataframes, file_names=[], merge_type='inner'):
             break
         right  = t
         left = t
+        limit2 = int((t+1)*(t+1))+1
         while left > 0:
             left -= 1
             try:
@@ -60,6 +62,10 @@ def merge_dataframes(dataframes, file_names=[], merge_type='inner'):
                 break
             except Exception as e:
                 print('Could not merge with {}, moving on to next. Encountered {}'.format(name, e))
+            limit2 -= 1
+            if limit2 <= 0:
+                break
+
         else:
             print('{} could not merge with any other df'.format(right))
             if merged:
@@ -70,6 +76,9 @@ def merge_dataframes(dataframes, file_names=[], merge_type='inner'):
                 dataframes.pop(right)
                 if names_exist:
                     file_names.pop(right)
+        limit -= 1
+        if limit <= 0:
+            break
 
     return dt, name, remaining_dfs, remaining_names
 
@@ -78,10 +87,14 @@ def generate_reports(dataframe, file_names=[], merge_type='inner', merged=True, 
     if not merged:
         merges, names = [], []
         unmerged_dataframes, unmerged_names = dataframe[:], file_names[:]
+        limit = int(len(unmerged_dataframes)**2)
         while len(unmerged_dataframes) > 1:
             dataframe, merged_files, unmerged_dataframes, unmerged_names = merge_dataframes(unmerged_dataframes, unmerged_names, merge_type)
             merges.append(dataframe)
             names.append(merged_files)
+            limit -= 1
+            if limit <=0:
+                break
         dataframes = merges
     for dataframe, merged_files in zip(dataframes, names):
         try:
