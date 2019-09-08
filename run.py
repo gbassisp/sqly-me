@@ -4,7 +4,7 @@ def run():
 
     files, names = sqly.available_csv_files, sqly.available_csv_file_names
     df = []
-    merge_type = "inner" #choose between inner, outer, right, left
+    merge_type = "outer" #choose between inner, outer, right, left
     for f in files:
         t = sqly.readcsv.import_csv(f)
         df.append(t)
